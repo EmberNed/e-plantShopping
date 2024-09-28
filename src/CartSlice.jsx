@@ -1,4 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
+import {s} from "vite/dist/node/types.d-aGj9QkWt.js";
+import {unstable_renderSubtreeIntoContainer} from "react-dom";
 
 export const CartSlice = createSlice({
   name: 'cart',
@@ -7,13 +9,24 @@ export const CartSlice = createSlice({
   },
   reducers: {
     addItem: (state, action) => {
-    
+      const {name, image, cost } = action.payload;
+      const existItems = state.items.filter(item=> item.name === name);
+      if (existItems) {
+        existItems.quantity++;
+      }else {
+        state.items.push({ name, image, cost, quantity:1 });
+      }
     },
+
     removeItem: (state, action) => {
+      state.items = state.items.filter(item => item.name !== action.payload);
     },
     updateQuantity: (state, action) => {
-
-    
+      const {name, quantity } = action.payload;
+      const existItem = state.items.filter(item=> item.name === name);
+      if (existItem) {
+        existItem.quantity = quantity;
+      }
     },
   },
 });
